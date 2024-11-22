@@ -3,7 +3,13 @@ package lernia.c10_springboot_v2.location;
 import org.springframework.data.repository.ListCrudRepository;
 import lernia.c10_springboot_v2.location.entity.Locations;
 
-//    public interface KategoriRepository extends ListCrudRepository<Kategori, Integer>
+import java.util.List;
+
 public interface LocationRepository extends ListCrudRepository<Locations, Long> {
+    List<Locations> findByPrivateLocationIsFalse();
+    List<Locations> findAllByPrivateLocationIsFalseAndNameContainsIgnoreCase(String name);
 
 }
+
+
+

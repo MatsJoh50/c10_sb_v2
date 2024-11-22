@@ -12,7 +12,7 @@ public class Kategori {
     private Integer id;
 
     @Size(max = 255)
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false, length = 255)
     private String name;
 
     @Size(max = 255)

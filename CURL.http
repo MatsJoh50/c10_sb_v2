@@ -1,7 +1,8 @@
 ### GET request to example server
 GET http://localhost:8080/kategori
 ###
-
+GET http://localhost:8080/kategori/star
+###
 POST localhost:8080/kategori
 Content-Type: application/json
 
@@ -12,4 +13,6 @@ Content-Type: application/json
 }
 
 ###
-GET localhost:8080/location
+GET localhost:8080/locations/public
+###
+GET http://localhost:8080/locations/public/Eiffel%20Tower

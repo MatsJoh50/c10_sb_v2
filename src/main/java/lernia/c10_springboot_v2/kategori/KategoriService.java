@@ -9,26 +9,38 @@ import java.util.List;
 public class KategoriService {
 
     KategoriRepository kategoriRepository;
+
     public KategoriService(KategoriRepository kategoriRepository) {
         this.kategoriRepository = kategoriRepository;
     }
-
 
 
     public List<KategoriDto> getAllKategorier() {
         return kategoriRepository.findAll().stream()
                 .map(KategoriDto::fromKategori)
                 .toList();
-    };
+    }
 
-    public int addKategori(KategoriDto kategoriDto) {
+    public Integer addKategori(KategoriDto kategoriDto) {
+        if (kategoriRepository.existsByName(kategoriDto.name())) {
+            throw new IllegalArgumentException("Kategorin existerar redan");
+        }
+
         Kategori kategori = new Kategori();
         kategori.setName(kategoriDto.name());
         kategori.setSymbol(kategoriDto.symbol());
         kategori.setDescription(kategoriDto.description());
 
-        kategoriRepository.save(kategori);
+        kategori = kategoriRepository.save(kategori);
+        return kategori.getId();
+    }
 
-            return kategori.getId();
-    };
-};
+    public List<KategoriDto> getKategori(String name) {
+        return kategoriRepository.findAll().stream()
+                .filter(k -> k.getName().equalsIgnoreCase(name)) // Filter by name
+//                .map(k -> new KategoriDto(k.getName(), k.getSymbol(), k.getDescription())) // Map to DTO
+                .map(KategoriDto::fromKategori)
+                .toList();
+    }
+
+}

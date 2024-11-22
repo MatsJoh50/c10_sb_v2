@@ -1,10 +1,7 @@
 package lernia.c10_springboot_v2.kategori;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -24,9 +21,19 @@ public class KategoriController {
         return kategoriService.getAllKategorier();
     }
 
+    @GetMapping("/kategori/{id}")
+    public ResponseEntity<List<KategoriDto>> getKategori(@PathVariable String id) {
+        List<KategoriDto> kategoriList = kategoriService.getKategori(id);
+        if (kategoriList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(kategoriList);
+    }
+
+
     @PostMapping("/kategori")
     public ResponseEntity<Void> createKategori(@RequestBody KategoriDto kategoriDto) {
-        int id = kategoriService.addKategori(kategoriDto);
-            return ResponseEntity.created(URI.create("/kategori/" + id)).build();
+        Integer name = kategoriService.addKategori(kategoriDto);
+            return ResponseEntity.created(URI.create("/kategori/" + name)).build();
     };
 }
