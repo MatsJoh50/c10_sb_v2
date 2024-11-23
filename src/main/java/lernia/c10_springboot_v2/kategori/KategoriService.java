@@ -38,7 +38,6 @@ public class KategoriService {
     public List<KategoriDto> getKategori(String name) {
         return kategoriRepository.findAll().stream()
                 .filter(k -> k.getName().equalsIgnoreCase(name)) // Filter by name
-//                .map(k -> new KategoriDto(k.getName(), k.getSymbol(), k.getDescription())) // Map to DTO
                 .map(KategoriDto::fromKategori)
                 .toList();
     }

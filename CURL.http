@@ -13,6 +13,19 @@ Content-Type: application/json
 }
 
 ###
-GET localhost:8080/locations/public
+GET http://localhost:8080/locations/public/all
 ###
-GET http://localhost:8080/locations/public/Eiffel%20Tower
+GET http://localhost:8080/locations/public/Eiffel
+###
+GET http://localhost:8080/locations/all
+###
+POST localhost:8080/locations/add
+Content-Type: application/json
+
+{
+  "name": "Stockholm",
+  "kategori": 1,
+  "userId": "100",
+  "privateLocation": false,
+  "description": "Capital of Sweden"
+}

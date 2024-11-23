@@ -1,56 +1,53 @@
 package lernia.c10_springboot_v2.location;
 
-import lernia.c10_springboot_v2.kategori.KategoriDto;
-import lernia.c10_springboot_v2.kategori.KategoriService;
-import lernia.c10_springboot_v2.location.entity.Locations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@RestController
 public class LocationController {
 
     LocationService locationService;
 
     public LocationController(LocationService locationService) {
+
         this.locationService = locationService;
     }
 
 
-    @GetMapping("/locations")
+    @GetMapping("/locations/all")
     public List<LocationDto> getAllLocations() {
         return locationService.getAllLocations();
     }
 
-    @PostMapping("/locations")
-    public ResponseEntity<Void> createLocation(@RequestBody LocationDto locationDto) {
-        int id = locationService.addLocation(locationDto);
-        return ResponseEntity.created(URI.create("/locations/" + id)).build();
+//    @PostMapping("/locations/add")
+//    public ResponseEntity<Void> createLocation(@RequestBody LocationDto locationDto) {
+//        int id = locationService.addLocation(locationDto);
+//        return ResponseEntity.created(URI.create("/locations/" + id)).build();
+//    }
+
+    @GetMapping("/locations/public/all")
+    public List<LocationDto> getPublicLocations() {
+        return locationService.getAllPublicLocations();
     }
 
-    // ##### GET
-//        TODO:     Hämta alla publika platser eller en specifik publik plats (föranonyma användare).
-    @GetMapping("/locations/public")
-    public ResponseEntity<List<LocationDto>> getPublicLocations() {
-        return ResponseEntity.ok(locationService.getAllPublicLocations());
-    }
+//    @GetMapping("/locations/public/{name}")
+//    public ResponseEntity<List<LocationDto>> getPublicLocation(@PathVariable String name) {
+//        List<LocationDto> result = locationService.getPublicLocation(name);
+//
+//        if(result.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        return ResponseEntity.ok(result);
+//    }
 
     @GetMapping("/locations/public/{name}")
     public ResponseEntity<List<LocationDto>> getPublicLocation(@PathVariable String name) {
         List<LocationDto> result = locationService.getPublicLocation(name);
-
-        if(result.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(result);
-//        return ResponseEntity.created(URI.create("/locations/public/" + result)).build();
+        return result.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
     }
 
 //        TODO:     Hämta alla publika platser inom en specifik kategori.

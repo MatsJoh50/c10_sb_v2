@@ -13,20 +13,24 @@ public class KategoriController {
     KategoriService kategoriService;
 
     public KategoriController(KategoriService kategoriService) {
+
         this.kategoriService = kategoriService;
     }
 
     @GetMapping("/kategori")
     public List<KategoriDto> kategoriList() {
+
         return kategoriService.getAllKategorier();
     }
 
     @GetMapping("/kategori/{id}")
     public ResponseEntity<List<KategoriDto>> getKategori(@PathVariable String id) {
         List<KategoriDto> kategoriList = kategoriService.getKategori(id);
+
         if (kategoriList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         return ResponseEntity.ok(kategoriList);
     }
 
