@@ -89,6 +89,7 @@
                             <enableLazyInitialization>true</enableLazyInitialization>
                             <enableDirtyTracking>true</enableDirtyTracking>
                             <enableAssociationManagement>true</enableAssociationManagement>
+
                         </configuration>
                     </execution>
                 </executions>

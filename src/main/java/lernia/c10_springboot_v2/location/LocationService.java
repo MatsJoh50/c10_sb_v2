@@ -1,7 +1,7 @@
 package lernia.c10_springboot_v2.location;
 
-import org.springframework.stereotype.Service;
 import lernia.c10_springboot_v2.location.entity.Location;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
@@ -34,17 +34,17 @@ public class LocationService {
     }
 
 
-//    public int addLocation(LocationDto locationDto) {
-//        Location locations = new Location();
-//
-//        locations.setKategori(locationDto.kategori());
-//        locations.setUserId(locationDto.userId());
-//        locations.setIsPrivate(locationDto.isPrivate());
-//        locations.setDescription(locationDto.description());
-//
-//        locations = locationRepository.save(locations);
-//
-//        return locations.getId();
-//    }
+    public int addLocation(LocationDto locationDto) {
+        Location locations = new Location();
+
+        locations.setKategori(locationDto.kategori());
+        locations.setUserId(locationDto.userId());
+        locations.setIsPrivate(locationDto.isPrivate());
+        locations.setDescription(locationDto.description());
+
+        locations = locationRepository.save(locations);
+
+        return locations.getId();
+    }
 
 }

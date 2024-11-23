@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.time.Instant;
-
 @Entity
 @Table(name = "locations")
 public class Location {
@@ -43,14 +41,6 @@ public class Location {
     @NotNull
     @Column(name = "latitude", nullable = false)
     private Double latitude;
-
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "dateOfCreation")
-    private Instant dateOfCreation;
-
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "dateOfChange")
-    private Instant dateOfChange;
 
     public Integer getId() {
         return id;
@@ -114,22 +104,6 @@ public class Location {
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
-    }
-
-    public Instant getDateOfCreation() {
-        return dateOfCreation;
-    }
-
-    public void setDateOfCreation(Instant dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
-    }
-
-    public Instant getDateOfChange() {
-        return dateOfChange;
-    }
-
-    public void setDateOfChange(Instant dateOfChange) {
-        this.dateOfChange = dateOfChange;
     }
 
 }

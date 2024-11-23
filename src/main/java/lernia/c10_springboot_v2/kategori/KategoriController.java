@@ -24,7 +24,8 @@ public class KategoriController {
     }
 
     @GetMapping("/kategori/{id}")
-    public ResponseEntity<List<KategoriDto>> getKategori(@PathVariable String id) {
+    public ResponseEntity<List<KategoriDto>> getKategori(@PathVariable("id") String id) {
+        System.out.println(id);
         List<KategoriDto> kategoriList = kategoriService.getKategori(id);
 
         if (kategoriList.isEmpty()) {

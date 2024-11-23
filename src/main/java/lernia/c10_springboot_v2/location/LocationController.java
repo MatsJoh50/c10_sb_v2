@@ -1,6 +1,5 @@
 package lernia.c10_springboot_v2.location;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -45,9 +44,8 @@ public class LocationController {
 //    }
 
     @GetMapping("/locations/public/{name}")
-    public ResponseEntity<List<LocationDto>> getPublicLocation(@PathVariable String name) {
-        List<LocationDto> result = locationService.getPublicLocation(name);
-        return result.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+    public List<LocationDto> getPublicLocation(@PathVariable("name") String name) {
+        return locationService.getPublicLocation(name);
     }
 
 //        TODO:     Hämta alla publika platser inom en specifik kategori.
