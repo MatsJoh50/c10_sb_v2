@@ -21,30 +21,57 @@ public class LocationService {
 
 
     public List<LocationDto> getAllPublicLocations(){
-        return locationRepository.findByIsPrivateIsFalse().stream()
+        return locationRepository.findAllByIsPrivateIsFalse().stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
 
-    public List<LocationDto> getPublicLocation(String name) {
-        return locationRepository.findAllByIsPrivateIsFalseAndNameContainsIgnoreCase(name.trim())
-                .stream()
+    public List<LocationDto> getPublicLocationById(Integer id) {
+        return locationRepository.findByIdAndIsPrivateFalse(id).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
 
-
-    public int addLocation(LocationDto locationDto) {
-        Location locations = new Location();
-
-        locations.setKategori(locationDto.kategori());
-        locations.setUserId(locationDto.userId());
-        locations.setIsPrivate(locationDto.isPrivate());
-        locations.setDescription(locationDto.description());
-
-        locations = locationRepository.save(locations);
-
-        return locations.getId();
+    public List<LocationDto> getPublicLocationByCategory(Integer cat) {
+        return locationRepository.findAllByIsPrivateIsFalseAndKategori(cat).stream()
+                .map(LocationDto::fromLocation)
+                .toList();
     }
 
+    public Location addLocation(LocationDto locationDto) {
+        Location location = new Location();
+
+        location.setName(locationDto.name());
+        location.setKategori(locationDto.kategori());
+        location.setUserId(locationDto.userId());
+        location.setIsPrivate(locationDto.isPrivate());
+        location.setDescription(locationDto.description());
+        location.setLatitude(locationDto.latitude());
+        location.setLongitude(locationDto.longitude());
+
+        location = locationRepository.save(location);
+
+        return location;  // Return the generated ID
+    }
+
+
+    public List<LocationDto> getAllUserLocations(Integer userId) {
+        return locationRepository.findAllByUserId(userId).stream()
+                .map(LocationDto::fromLocation)
+                .toList();
+    }
+
+    public Location editLocation(Integer id, LocationDto locationDto) {
+        Location location = locationRepository.findById(id).orElse(null);
+
+        assert location != null;
+        location.setName(locationDto.name());
+        location.setKategori(locationDto.kategori());
+        location.setIsPrivate(locationDto.isPrivate());
+        location.setDescription(locationDto.description());
+
+        location = locationRepository.save(location);
+
+        return location;  // Return the generated ID
+    }
 }

@@ -1,8 +1,11 @@
 package lernia.c10_springboot_v2.location;
 
+import jakarta.validation.Valid;
+import lernia.c10_springboot_v2.location.entity.Location;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,43 +24,43 @@ public class LocationController {
         return locationService.getAllLocations();
     }
 
-//    @PostMapping("/locations/add")
-//    public ResponseEntity<Void> createLocation(@RequestBody LocationDto locationDto) {
-//        int id = locationService.addLocation(locationDto);
-//        return ResponseEntity.created(URI.create("/locations/" + id)).build();
-//    }
-
     @GetMapping("/locations/public/all")
     public List<LocationDto> getPublicLocations() {
         return locationService.getAllPublicLocations();
     }
 
-//    @GetMapping("/locations/public/{name}")
-//    public ResponseEntity<List<LocationDto>> getPublicLocation(@PathVariable String name) {
-//        List<LocationDto> result = locationService.getPublicLocation(name);
-//
-//        if(result.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        return ResponseEntity.ok(result);
-//    }
 
-    @GetMapping("/locations/public/{name}")
-    public List<LocationDto> getPublicLocation(@PathVariable("name") String name) {
-        return locationService.getPublicLocation(name);
+    @GetMapping("/locations/public/{id}")
+    public List<LocationDto> getPublicLocationById(@PathVariable("id") Integer id) {
+        return locationService.getPublicLocationById(id);
     }
 
-//        TODO:     Hämta alla publika platser inom en specifik kategori.
-//        TODO:     Hämta alla platser (både publika och privata) som tillhör den inloggade användaren.
-//        TODO:     Hämta alla platser inom en viss yta (radie från ett centrum eller hörn på en kvadrat).
-//        TODO:     POST: Skapa en ny plats (kräver inloggning).
-//        TODO:     PUT: Uppdatera en befintlig plats (kräver inloggning).
+    //        TODO:     Hämta alla publika platser inom en specifik kategori.
+    @GetMapping("/locations/public/category/{cat}")
+    public List<LocationDto> getPublicLocationByCategory(@PathVariable("cat") Integer cat) {
+        return locationService.getPublicLocationByCategory(cat);
+    }
 
-//       POST: Skapa en ny plats (kräver inloggning).
-//       PUT: Uppdatera en befintlig plats (kräver inloggning).
-//              Vilka fält ska kunna uppdateras?
-//       DELETE: Ta bort en befintlig plats (kräver inloggning). Här kan soft
-//              delete vara ett alternativ.
+    //        TODO:     POST: Skapa en ny plats (kräver inloggning).
+    @PostMapping("/locations/add")
+    public ResponseEntity<Location> addLocation(@Valid @RequestBody LocationDto locationDto) {
+        Location savedLocation = locationService.addLocation(locationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedLocation);
+    }
+
+//        TODO:     Hämta alla platser (både publika och privata) som tillhör den inloggade användaren.
+    @GetMapping("/locations/{userId}")
+    public List<LocationDto> getLocationsByUserId(@PathVariable("userId") Integer userId) {
+        return locationService.getAllUserLocations(userId);
+    }
+//        TODO:     PUT: Uppdatera en befintlig plats (kräver inloggning).
+    @PutMapping("/locations/edit/{id}")
+    public ResponseEntity<Location> editLocation(@PathVariable("id") Integer id, @Valid @RequestBody LocationDto locationDto) {
+        Location editLocation = locationService.editLocation(id, locationDto);
+        return ResponseEntity.status(HttpStatus.OK).body(editLocation);
+    }
+//        TODO:     Hämta alla platser inom en viss yta (radie från ett centrum eller hörn på en kvadrat).
+//        TODO:       DELETE: Ta bort en befintlig plats (kräver inloggning). Här kan soft
+//                          delete vara ett alternativ.
 
 }

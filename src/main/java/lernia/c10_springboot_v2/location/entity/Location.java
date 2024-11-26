@@ -3,6 +3,7 @@ package lernia.c10_springboot_v2.location.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.websocket.OnMessage;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
@@ -14,7 +15,7 @@ public class Location {
     private Integer id;
 
     @Size(max = 255)
-    @NotNull
+    @NotNull(message = "Name must not be null")
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -26,9 +27,8 @@ public class Location {
     @Column(name = "userId", nullable = false)
     private Integer userId;
 
-    @ColumnDefault("1")
-    @Column(name = "isPrivate")
-    private Boolean isPrivate;
+    @Column(name = "is_private")
+    private Boolean isPrivate = true;
 
     @Size(max = 255)
     @Column(name = "description")
@@ -78,8 +78,8 @@ public class Location {
         return isPrivate;
     }
 
-    public void setIsPrivate(Boolean isPrivate) {
-        this.isPrivate = isPrivate;
+    public void setIsPrivate(Boolean is_private) {
+        this.isPrivate = is_private;
     }
 
     public String getDescription() {
