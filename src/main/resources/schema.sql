@@ -17,11 +17,9 @@ CREATE TABLE IF NOT EXISTS locations
     is_private  BOOLEAN        NOT NULL DEFAULT TRUE,
     description TEXT,
     longitude   DECIMAL(10, 7) NOT NULL, -- Adjusted precision for geographic coordinates
-    latitude    DECIMAL(10, 7) NOT NULL -- Adjusted precision for geographic coordinates
+    latitude    DECIMAL(10, 7) NOT NULL, -- Adjusted precision for geographic coordinates
+    deleted     BOOLEAN        NOT NULL DEFAULT FALSE,
+    deleted_by  INT
 );
-#                                          CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL  -- Optional, if referencing a users table
-
-#     dateOfCreation DATETIME DEFAULT CURRENT_TIMESTAMP,
-#     dateOfChange DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-#     location POINT NOT NULL,
-#     SPATIAL INDEX (location)
+#     dateOfChange   TIMESTAMP   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+#     dateOfCreation TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,

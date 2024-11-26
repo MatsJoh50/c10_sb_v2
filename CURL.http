@@ -20,6 +20,12 @@ GET http://localhost:8080/locations/public/1
 GET http://localhost:8080/locations/all
 ###
 GET http://localhost:8080/locations/public/category/1
+
+
+###
+GET http://localhost:8080/locations/1003
+###
+GET http://localhost:8080/locations/remove/4
 ###
 POST localhost:8080/locations/add
 Content-Type: application/json
@@ -33,7 +39,13 @@ Content-Type: application/json
   "longitude": 18.0686,
   "latitude": 59.3293
 }
-
 ###
-GET http://localhost:8080/locations/1003
+PUT http://localhost:8080/locations/edit/5
+Content-Type: application/json
 
+{
+  "name": "Stockholm",
+  "kategori": 1,
+  "isPrivate": false,
+  "description": "Edited Capital of Sweden"
+}

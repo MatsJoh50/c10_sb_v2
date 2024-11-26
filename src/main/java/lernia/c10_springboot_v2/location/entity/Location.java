@@ -1,9 +1,9 @@
 package lernia.c10_springboot_v2.location.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.websocket.OnMessage;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
@@ -41,6 +41,32 @@ public class Location {
     @NotNull
     @Column(name = "latitude", nullable = false)
     private Double latitude;
+
+
+    @NotNull
+//    @ColumnDefault("0")
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted = false;
+
+    @Column(name = "deletedBy")
+    private Integer deletedBy;
+
+    public Integer getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(Integer deletedBy) {
+        this.deletedBy = deletedBy;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
 
     public Integer getId() {
         return id;

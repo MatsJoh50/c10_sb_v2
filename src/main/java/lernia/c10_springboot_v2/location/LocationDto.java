@@ -11,7 +11,8 @@ public record LocationDto(
         Boolean isPrivate,      // Boolean indicating if the location is private
         String description,     // Description of the location
         Double longitude,       // Longitude of the location
-        Double latitude         // Latitude of the location
+        Double latitude,         // Latitude of the location
+        Boolean deleted
 
 ) {
 
@@ -25,7 +26,8 @@ public record LocationDto(
                 location.getIsPrivate(),
                 location.getDescription(),
                 location.getLongitude(),
-                location.getLatitude()
+                location.getLatitude(),
+                location.getDeleted()
         );
     }
 }

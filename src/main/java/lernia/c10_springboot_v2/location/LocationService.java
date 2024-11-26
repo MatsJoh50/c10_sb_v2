@@ -14,26 +14,26 @@ public class LocationService {
     }
 
     public List<LocationDto> getAllLocations() {
-        return locationRepository.findAll().stream()
+        return locationRepository.findAllByDeletedFalse().stream()
                 .map(LocationDto::fromLocation) // Convert to DTO
                 .toList();
     }
 
 
     public List<LocationDto> getAllPublicLocations(){
-        return locationRepository.findAllByIsPrivateIsFalse().stream()
+        return locationRepository.findAllByIsPrivateFalseAndDeletedFalse().stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
 
     public List<LocationDto> getPublicLocationById(Integer id) {
-        return locationRepository.findByIdAndIsPrivateFalse(id).stream()
+        return locationRepository.findByIdAndIsPrivateFalseAndDeletedFalse(id).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
 
     public List<LocationDto> getPublicLocationByCategory(Integer cat) {
-        return locationRepository.findAllByIsPrivateIsFalseAndKategori(cat).stream()
+        return locationRepository.findAllByIsPrivateFalseAndKategoriAndDeletedFalse(cat).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
@@ -73,5 +73,15 @@ public class LocationService {
         location = locationRepository.save(location);
 
         return location;  // Return the generated ID
+    }
+
+    public Location removeLocation(Integer id) {
+        Location location = locationRepository.findById(id).orElse(null);
+        int user  = 666;
+        assert location != null;
+        location.setDeleted(true);
+        location.setDeletedBy(user);
+        location = locationRepository.save(location);
+        return location;
     }
 }

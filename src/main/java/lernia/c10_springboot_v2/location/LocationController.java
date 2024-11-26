@@ -60,7 +60,15 @@ public class LocationController {
         return ResponseEntity.status(HttpStatus.OK).body(editLocation);
     }
 //        TODO:     Hämta alla platser inom en viss yta (radie från ett centrum eller hörn på en kvadrat).
+
 //        TODO:       DELETE: Ta bort en befintlig plats (kräver inloggning). Här kan soft
 //                          delete vara ett alternativ.
+    @GetMapping("/locations/remove/{id}")
+    public ResponseEntity<String> removeLocation(@PathVariable("id") Integer id) {
+        Location removeLocation = locationService.removeLocation(id);
 
+        return ResponseEntity.status(HttpStatus.OK).body("Location has been removed: \n\t"
+                + "ID: " + removeLocation.getId()
+                + "\n\tName: " + removeLocation.getName());
+    }
 }
