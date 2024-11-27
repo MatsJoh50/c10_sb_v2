@@ -13,21 +13,19 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/locations/public/all
+GET http://localhost:8080/locations/1
 ###
-GET http://localhost:8080/locations/public/1
+GET http://localhost:8080/locations/public/all
 ###
 GET http://localhost:8080/locations/all
 ###
 GET http://localhost:8080/locations/public/category/1
-
-
 ###
-GET http://localhost:8080/locations/1003
+GET http://localhost:8080/locations/user/1003
 ###
 GET http://localhost:8080/locations/remove/4
 ###
-POST localhost:8080/locations/add
+POST localhost:8080/locations
 Content-Type: application/json
 
 {

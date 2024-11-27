@@ -10,16 +10,17 @@ CREATE TABLE IF NOT EXISTS kategori
 DROP TABLE IF EXISTS locations;
 CREATE TABLE IF NOT EXISTS locations
 (
-    id          INT PRIMARY KEY AUTO_INCREMENT,
+    id          INT            PRIMARY KEY AUTO_INCREMENT,
     name        VARCHAR(255)   NOT NULL,
     kategori    INT            NOT NULL,
     userId      INT            NOT NULL DEFAULT 0,
     is_private  BOOLEAN        NOT NULL DEFAULT TRUE,
     description TEXT,
-    longitude   DECIMAL(10, 7) NOT NULL, -- Adjusted precision for geographic coordinates
-    latitude    DECIMAL(10, 7) NOT NULL, -- Adjusted precision for geographic coordinates
+    coordinates GEOMETRY       NOT NULL SRID 4326,
+    dateOfCreation TIMESTAMP   DEFAULT NOW(),
+    dateOfChange   TIMESTAMP   DEFAULT NOW() ON UPDATE NOW(),
     deleted     BOOLEAN        NOT NULL DEFAULT FALSE,
     deleted_by  INT
 );
-#     dateOfChange   TIMESTAMP   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-#     dateOfCreation TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+#     longitude   DECIMAL(10, 7) NOT NULL, -- Adjusted precision for geographic coordinates
+#     latitude    DECIMAL(10, 7) NOT NULL, -- Adjusted precision for geographic coordinates

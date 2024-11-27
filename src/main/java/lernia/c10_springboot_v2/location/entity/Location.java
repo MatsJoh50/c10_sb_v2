@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.ColumnDefault;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
+
+import java.time.Instant;
 
 @Entity
-@Table(name = "locations")
+@Table(name = "locations", schema = "mydatabase")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,21 +38,43 @@ public class Location {
     private String description;
 
     @NotNull
-    @Column(name = "longitude", nullable = false)
-    private Double longitude;
-
-    @NotNull
-    @Column(name = "latitude", nullable = false)
-    private Double latitude;
-
-
-    @NotNull
-//    @ColumnDefault("0")
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
 
-    @Column(name = "deletedBy")
+    @Column(name = "deleted_by")
     private Integer deletedBy;
+
+    @Column(name = "dateOfCreation")
+    private Instant dateOfCreation = Instant.now();
+
+    @Column(name = "dateOfChange")
+    private Instant dateOfChange = Instant.now();
+
+    @Column(name = "coordinates", nullable = false)
+    private Point<G2D> coordinates;
+
+    public Point<G2D> getCoordinates() {
+        return this.coordinates;
+    }
+    public void setCoordinates(Point<G2D> coordinate) {
+        this.coordinates = coordinate;
+    }
+
+    public Instant getDateOfChange() {
+        return dateOfChange;
+    }
+
+    public void setDateOfChange(Instant dateOfChange) {
+        this.dateOfChange = dateOfChange;
+    }
+
+    public Instant getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Instant dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
 
     public Integer getDeletedBy() {
         return deletedBy;
@@ -114,22 +139,6 @@ public class Location {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
     }
 
 }

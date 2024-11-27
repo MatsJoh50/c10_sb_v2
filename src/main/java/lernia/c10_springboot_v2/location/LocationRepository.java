@@ -7,15 +7,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LocationRepository extends ListCrudRepository<Location, Integer> {
-    List<Location> findAllByDeletedFalse();
-
     Optional<Location> findByIdAndIsPrivateFalseAndDeletedFalse(Integer id);
+
+    List<Location> findAllByDeletedFalse();
 
     List<Location> findAllByIsPrivateFalseAndKategoriAndDeletedFalse(Integer kat);
 
     List<Location> findAllByIsPrivateFalseAndDeletedFalse();
 
     List<Location> findAllByUserId(Integer userId);
+
 }
 
 
