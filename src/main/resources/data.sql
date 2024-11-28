@@ -8,7 +8,7 @@ VALUES ('heart', '❤️', 'ett vackert hjärta'),
 
 TRUNCATE locations;
 -- Inserting famous locations into Locations table
-INSERT INTO locations (name, kategori, userId, is_private, description, coordinates)
+INSERT INTO locations (name, kategori, user_id, is_private, description, coordinates)
 VALUES
     ( 'Eiffel Tower', 1, 101, FALSE, 'Famous landmark in Paris',
      ST_GeomFromText('POINT(48.858370 2.294481 )', 4326)),

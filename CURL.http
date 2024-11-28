@@ -34,8 +34,8 @@ Content-Type: application/json
   "userId": 1003,
   "isPrivate": false,
   "description": "Capital of Sweden",
-  "longitude": 18.0686,
-  "latitude": 59.3293
+  "latitude": 59.3293,
+  "longitude": 18.0686
 }
 ###
 PUT http://localhost:8080/locations/edit/5
@@ -47,3 +47,5 @@ Content-Type: application/json
   "isPrivate": false,
   "description": "Edited Capital of Sweden"
 }
+###
+GET http://localhost:8080/locations/radius/2/56.06/1000

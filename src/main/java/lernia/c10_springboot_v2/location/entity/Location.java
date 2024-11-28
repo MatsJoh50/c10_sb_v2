@@ -27,7 +27,7 @@ public class Location {
     private Integer kategori;
 
     @NotNull
-    @Column(name = "userId", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
 
     @Column(name = "is_private")
@@ -44,10 +44,10 @@ public class Location {
     @Column(name = "deleted_by")
     private Integer deletedBy;
 
-    @Column(name = "dateOfCreation")
+    @Column(name = "date_of_creation")
     private Instant dateOfCreation = Instant.now();
 
-    @Column(name = "dateOfChange")
+    @Column(name = "date_of_change")
     private Instant dateOfChange = Instant.now();
 
     @Column(name = "coordinates", nullable = false)

@@ -46,7 +46,8 @@ public class LocationController {
     public ResponseEntity<String> addLocation(@RequestBody LocationDto locationDto) {
         int id = locationService.addLocation(locationDto);
         System.out.println(id);
-        return ResponseEntity.created(URI.create("/locations/" + id)).body("Location created with ID: " + id);
+        return ResponseEntity.created(URI.create("/locations/" + id)).build();
+//        return ResponseEntity.created(URI.create("/locations/" + id)).body("Location created with ID: " + id);
     }
 
 
@@ -62,7 +63,6 @@ public class LocationController {
                 locationService.editLocation(id, locationDto);
         return ResponseEntity.status(HttpStatus.OK).body("ID: " + id + " was succesufully edited");
     }
-//        TODO:     Hämta alla platser inom en viss yta (radie från ett centrum eller hörn på en kvadrat).
 
     //        TODO:       DELETE: Ta bort en befintlig plats (kräver inloggning). Här kan soft
 //                          delete vara ett alternativ.
@@ -74,4 +74,14 @@ public class LocationController {
                 + "ID: " + removeLocation.getId()
                 + "\n\tName: " + removeLocation.getName());
     }
+
+//        TODO:     Hämta alla platser inom en viss yta (radie från ett centrum eller hörn på en kvadrat).
+
+    @GetMapping("/locations/radius/{lat}/{lon}/{dist}")
+    public ResponseEntity<List<LocationDto>> getLocationById(@PathVariable("lat") Double lat, @PathVariable("lon") Double lon, @PathVariable("dist") Integer dist )  {
+        List<LocationDto> foundLocations = locationService.findLocationsWithinDistance(lat, lon, dist);
+        System.out.println("Found locations: " + foundLocations.size());
+        return ResponseEntity.status(HttpStatus.OK).body(foundLocations);
+    }
+
 }

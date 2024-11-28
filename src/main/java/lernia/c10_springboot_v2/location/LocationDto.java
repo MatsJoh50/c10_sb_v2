@@ -11,8 +11,8 @@ public record LocationDto(
         Integer userId,         // User ID who owns the location
         Boolean isPrivate,      // Boolean indicating if the location is private
         String description,     // Description of the location
-        Double longitude,       // Longitude of the location
         Double latitude,         // Latitude of the location
+        Double longitude,       // Longitude of the location
         Boolean deleted
 
 ) {

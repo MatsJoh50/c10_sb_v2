@@ -13,12 +13,12 @@ CREATE TABLE IF NOT EXISTS locations
     id          INT            PRIMARY KEY AUTO_INCREMENT,
     name        VARCHAR(255)   NOT NULL,
     kategori    INT            NOT NULL,
-    userId      INT            NOT NULL DEFAULT 0,
+    user_id      INT            NOT NULL DEFAULT 0,
     is_private  BOOLEAN        NOT NULL DEFAULT TRUE,
     description TEXT,
     coordinates GEOMETRY       NOT NULL SRID 4326,
-    dateOfCreation TIMESTAMP   DEFAULT NOW(),
-    dateOfChange   TIMESTAMP   DEFAULT NOW() ON UPDATE NOW(),
+    date_of_creation TIMESTAMP   DEFAULT NOW(),
+    date_of_change   TIMESTAMP   DEFAULT NOW() ON UPDATE NOW(),
     deleted     BOOLEAN        NOT NULL DEFAULT FALSE,
     deleted_by  INT
 );
