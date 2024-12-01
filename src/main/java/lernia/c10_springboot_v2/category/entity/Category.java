@@ -1,12 +1,12 @@
-package lernia.c10_springboot_v2.kategori.entity;
+package lernia.c10_springboot_v2.category.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "kategori")
-public class Kategori {
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

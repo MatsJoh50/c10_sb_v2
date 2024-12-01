@@ -28,7 +28,7 @@ public class Location {
 
     @NotNull
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private String userId;
 
     @Column(name = "is_private")
     private Boolean isPrivate = true;
@@ -42,7 +42,7 @@ public class Location {
     private Boolean deleted = false;
 
     @Column(name = "deleted_by")
-    private Integer deletedBy;
+    private String deletedBy;
 
     @Column(name = "date_of_creation")
     private Instant dateOfCreation = Instant.now();
@@ -76,11 +76,11 @@ public class Location {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public Integer getDeletedBy() {
+    public String getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeletedBy(Integer deletedBy) {
+    public void setDeletedBy(String deletedBy) {
         this.deletedBy = deletedBy;
     }
 
@@ -117,11 +117,11 @@ public class Location {
         this.kategori = kategori;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

@@ -14,13 +14,17 @@ import java.util.Optional;
 public interface LocationRepository extends ListCrudRepository<Location, Integer> {
     Optional<Location> findByIdAndIsPrivateFalseAndDeletedFalse(Integer id);
 
-    List<Location> findAllByDeletedFalse();
+    Optional<Location> findByIdAndDeletedFalse(Integer id);
+
+    Optional<Location> findByIdAndUserIdAndDeletedIsFalse(Integer id, String userId);
 
     List<Location> findAllByIsPrivateFalseAndKategoriAndDeletedFalse(Integer kat);
 
     List<Location> findAllByIsPrivateFalseAndDeletedFalse();
 
-    List<Location> findAllByUserId(Integer userId);
+    List<Location> findAllByUserIdOrIsPrivateFalseAndDeletedIsFalse(String userId);
+
+    List<Location> findAllByKategoriAndUserIdOrIsPrivateFalse(Integer kategori, String userId);
 
         @Query(value = """
         SELECT id, name,

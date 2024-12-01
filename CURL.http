@@ -1,10 +1,13 @@
-### GET request to example server
-GET http://localhost:8080/kategori
+### 
+GET http://localhost:8080/api/category
+
 ###
-GET http://localhost:8080/kategori/star
+GET http://localhost:8080/api/category/star
+
 ###
-POST localhost:8080/kategori
+POST localhost:8080/api/category
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "tester",
@@ -12,40 +15,70 @@ Content-Type: application/json
   "description": "en bild på en dator"
 }
 
+
 ###
-GET http://localhost:8080/locations/1
-###
-GET http://localhost:8080/locations/public/all
-###
-GET http://localhost:8080/locations/all
-###
-GET http://localhost:8080/locations/public/category/1
-###
-GET http://localhost:8080/locations/user/1003
-###
-GET http://localhost:8080/locations/remove/4
-###
-POST localhost:8080/locations
+
+POST https://fungover.org/auth
 Content-Type: application/json
 
 {
+  "username": "martin",
+  "password": "password"
+}
+
+> {% client.global.set("auth_token", response.body.access_token); %}
+
+###
+
+GET http://localhost:8080/api/locations/1
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/locations/all
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/locations/public/category/1
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/locations/remove/4
+Authorization: Bearer {{auth_token}}
+
+###
+POST localhost:8080/api/locations
+
+Content-Type: application/json
+
+Authorization: Bearer {{auth_token}}
+
+{
   "name": "Stockholm",
-  "kategori": 2,
-  "userId": 1003,
+  "api/category": 2,
+  "userId": "martin",
   "isPrivate": false,
   "description": "Capital of Sweden",
   "latitude": 59.3293,
   "longitude": 18.0686
 }
+
+
 ###
-PUT http://localhost:8080/locations/edit/5
+PUT http://localhost:8080/api/locations/edit/5
+
 Content-Type: application/json
 
 {
   "name": "Stockholm",
-  "kategori": 1,
+  "api/category": 1,
   "isPrivate": false,
   "description": "Edited Capital of Sweden"
 }
+
+Authorization: Bearer {{auth_token}}
+
 ###
-GET http://localhost:8080/locations/radius/2/56.06/1000
+GET http://localhost:8080/api/locations/radius/2/54.06/10000
+Authorization: Bearer {{auth_token}}
+
+###
