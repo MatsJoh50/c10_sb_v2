@@ -1,121 +1,74 @@
 package lernia.c10_springboot_v2.location;
 
-import jakarta.validation.constraints.NotNull;
-import lernia.c10_springboot_v2.exceptions.GlobalExceptionHandler;
 import lernia.c10_springboot_v2.location.entity.Location;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometries;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
 
 @Service
 public class LocationService {
-
+    @Autowired
     LocationRepository locationRepository;
 
     public LocationService(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
+
     public List<LocationDto> getAllLocations() {
-        return locationRepository.findAllByDeletedFalse().stream()
-                .map(LocationDto::fromLocation) // Convert to DTO
-                .toList();
-    }
-
-
-    public List<LocationDto> getAllPublicLocations() {
-        return locationRepository.findAllByIsPrivateFalseAndDeletedFalse().stream()
-                .map(LocationDto::fromLocation)
-                .toList();
-    }
-
-    public LocationDto getPublicLocationById(Integer id) {
-        return locationRepository.findByIdAndIsPrivateFalseAndDeletedFalse(id)
-//                .stream()
-//                .map(LocationDto::fromLocation)
-//                .toList();
-                .map(LocationDto::fromLocation)
-                .orElseThrow(() -> new IllegalArgumentException("Location with ID " + id + " not found"));
-    }
-
-    public List<LocationDto> getPublicLocationByCategory(Integer cat) {
-        return locationRepository.findAllByIsPrivateFalseAndKategoriAndDeletedFalse(cat).stream()
-                .map(LocationDto::fromLocation)
-                .toList();
-    }
-
-    public Integer addLocation(LocationDto locationDto) {
-        Location location = new Location();
-
-        double latitude = locationDto.latitude();
-        double longitude = locationDto.longitude();
-
-        var position = Geometries.mkPoint(new G2D(latitude, longitude), WGS84);
-
-        location.setName(locationDto.name());
-        location.setKategori(locationDto.kategori());
-        location.setUserId(locationDto.userId());
-        location.setIsPrivate(locationDto.isPrivate());
-        location.setDescription(locationDto.description());
-        location.setCoordinates(position);
-
-        location = locationRepository.save(location);
-
-        return location.getId();  // Return the generated ID
-    }
-
-
-    public List<LocationDto> getAllUserLocations(Integer userId) {
-        return locationRepository.findAllByUserId(userId).stream()
-                .map(LocationDto::fromLocation)
-                .toList();
-    }
-
-    public Location editLocation(Integer id, LocationDto locationDto) {
-        Location location = locationRepository.findById(id).orElse(null);
-
-        assert location != null;
-        location.setName(locationDto.name());
-        location.setKategori(locationDto.kategori());
-        location.setIsPrivate(locationDto.isPrivate());
-        location.setDescription(locationDto.description());
-
-        location = locationRepository.save(location);
-
-        return location;  // Return the generated ID
-    }
-
-    public Location removeLocation(Integer id) {
-        Location location = locationRepository.findById(id).orElse(null);
-        int user = 666;
-        assert location != null;
-        location.setDeleted(true);
-        location.setDeletedBy(user);
-        location = locationRepository.save(location);
-        return location;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+            String userId =  authentication.getName();
+            return locationRepository.findAllByUserIdOrIsPrivateFalseAndDeletedIsFalse(userId).stream()
+                    .map(LocationDto::fromLocation)
+                    .toList();
+        } else {
+            return locationRepository.findAllByIsPrivateFalseAndDeletedFalse().stream()
+                    .map(LocationDto::fromLocation)
+                    .toList();
+        }
     }
 
     public LocationDto getLocationById(Integer id) {
-        return locationRepository.findById(id)
-                .map(LocationDto::fromLocation)
-                .orElseThrow(() -> new IllegalArgumentException("Location with ID " + id + " not found"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+            return locationRepository.findByIdAndUserIdAndDeletedIsFalse(id, authentication.getName())
+                    .map(LocationDto::fromLocation)
+                    .orElseThrow(() -> new IllegalArgumentException("Location with ID " + id + " not found"));
+        } else {
+            return locationRepository.findByIdAndIsPrivateFalseAndDeletedFalse(id)
+                    .map(LocationDto::fromLocation)
+                    .orElseThrow(() -> new IllegalArgumentException("Location with ID " + id + " not found"));
+        }
     }
 
+    public List<LocationDto> getLocationByCategory(Integer cat) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+            String userId = authentication.getName();
+            return locationRepository.findAllByKategoriAndUserIdOrIsPrivateFalse(cat, userId).stream()
+                  .map(LocationDto::fromLocation)
+                  .toList();
+        } else {
+            return locationRepository.findAllByIsPrivateFalseAndKategoriAndDeletedFalse(cat).stream()
+                    .map(LocationDto::fromLocation)
+                    .toList();
+        }
+    }
 
 
     public List<LocationDto> findLocationsWithinDistance(double latitude, double longitude, double distance) {
         List<LocationDto> allLocations = locationRepository.findAllByIsPrivateFalseAndDeletedFalse().stream()
                 .map(LocationDto::fromLocation)
                 .toList();
-        System.out.println("Locations to calculate: " + allLocations.size());
         return allLocations.stream()
                 .filter(location -> calculateDistance(latitude, longitude, location.latitude(), location.longitude()) <= distance)
                 .sorted(Comparator.comparingDouble(location ->
@@ -137,4 +90,79 @@ public class LocationService {
 
         return EARTH_RADIUS_KM * c;
     }
+
+
+    public Integer addLocation(LocationDto locationDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+
+            String userId = authentication.getName();
+
+            Location location = new Location();
+
+            double latitude = locationDto.latitude();
+            double longitude = locationDto.longitude();
+
+            var position = Geometries.mkPoint(new G2D(latitude, longitude), WGS84);
+
+            location.setName(locationDto.name());
+            location.setKategori(locationDto.kategori());
+            location.setUserId(userId);
+            location.setIsPrivate(locationDto.isPrivate());
+            location.setDescription(locationDto.description());
+            location.setCoordinates(position);
+
+            location = locationRepository.save(location);
+
+            return location.getId();  // Return the generated ID
+        } else {
+            throw new SecurityException("Authentication required");
+        }
+    }
+
+    public void editLocation(Integer id, LocationDto locationDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+
+            if(getLocationById(id) == null) {
+                throw new SecurityException("Authentication required");
+            }
+
+            Location location = locationRepository.findById(id).orElse(null);
+
+            assert location != null;
+            location.setName(locationDto.name());
+            location.setKategori(locationDto.kategori());
+            location.setIsPrivate(locationDto.isPrivate());
+            location.setDescription(locationDto.description());
+
+            location = locationRepository.save(location);
+
+        } else {
+            throw new SecurityException("Authentication required");
+        }
+    }
+
+    public Location removeLocation(Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+
+            if(getLocationById(id) == null) {
+                throw new SecurityException("Authentication required");
+            }
+
+            Location location = locationRepository.findById(id).orElse(null);
+            assert location != null;
+            location.setDeleted(true);
+            location.setDeletedBy(authentication.getName());
+            location = locationRepository.save(location);
+            return location;
+        } else {
+            throw new SecurityException("Authentication required");
+        }
+    }
+
+
 }
